@@ -26,7 +26,4 @@ public class ProdutoService {
 	public void remove(Produto obj) {
 		dao.deleteById(obj.getId_produto());
 	}
-	
-	
-
 }

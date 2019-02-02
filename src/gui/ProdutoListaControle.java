@@ -2,15 +2,20 @@ package gui;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Programa;
+import db.DbIntegrityException;
+import gui.util.Alerts;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,6 +29,9 @@ public class ProdutoListaControle implements Initializable {
 	
 	@FXML
 	private Button btNovo;
+	
+	@FXML
+	private Button btExcluir;
 
 	@FXML
 	private TableView<Produto> tableViewProduto;
@@ -78,6 +86,13 @@ public class ProdutoListaControle implements Initializable {
 		createDialogForm(obj, "/gui/ProdutoForm.fxml", parentStage);
 		*/
 	}
+	
+	@FXML
+	public void OnBtExcluirAction(ActionEvent event) {
+		Produto prod = tableViewProduto.getSelectionModel().getSelectedItem();
+		ExcluirProduto(prod);
+	}
+	
 
 	public void setProdutoService(ProdutoService service) {
 		this.service = service;
@@ -110,16 +125,15 @@ public class ProdutoListaControle implements Initializable {
 
 	public void updateTableView() {
 		if (service == null) {
-			throw new IllegalStateException("Service was null");
+			throw new IllegalStateException("Serviço está nulo");
 		}
 		List<Produto> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
 		tableViewProduto.setItems(obsList);
-		//initEditButtons();
-		//initRemoveButtons();
 	}
+	
+	
 	/*
-
 	private void createDialogForm(Produto obj, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
@@ -186,22 +200,21 @@ public class ProdutoListaControle implements Initializable {
 			}
 		});
 	}
+	*/
 
-	private void removeEntity(Produto obj) {
-		Optional<ButtonType> result = Alerts.showConfirmation("Confirmation", "Are you sure to delete?");
+	private void ExcluirProduto(Produto obj) {
+		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação","Você tem certeza que quer excluir este item?");
 		if (result.get() == ButtonType.OK) {
 			if (service == null) {
-				throw new IllegalStateException("Service was null");
+				throw new IllegalStateException("Serviço está nulo");
 			}
 			try {
 				service.remove(obj);
 				updateTableView();
 			}
 			catch (DbIntegrityException e) {
-				Alerts.showAlert("Error removing object", null, e.getMessage(), AlertType.ERROR);
+				Alerts.showAlert("Erro ao remover o objeto", null, e.getMessage(), AlertType.ERROR);
 			}			
 		}
 	}
-	*/
-
 }

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="481.0" prefWidth="1072.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutoListaControle">
+<VBox prefHeight="481.0" prefWidth="1478.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutoListaControle">
    <children>
       <Label text="Produto Registros">
          <font>
@@ -22,23 +22,24 @@
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
           <Button fx:id="btNovo" mnemonicParsing="false" onAction="#OnBtNovoAction" text="Novo" />
+            <Button fx:id="btExcluir" mnemonicParsing="false" onAction="#OnBtExcluirAction" text="Excluir" />
         </items>
       </ToolBar>
       <TableView fx:id="tableViewProduto" prefHeight="198.0" prefWidth="386.0">
         <columns>
-          <TableColumn fx:id="tableColumnId_produto" prefWidth="75.0" text="Id" />
-          <TableColumn fx:id="tableColumnP_cat" prefWidth="75.0" text="Id Categoria" />
-            <TableColumn fx:id="tableColumnP_codigo" prefWidth="75.0" text="Código" />
-            <TableColumn fx:id="tableColumnP_desc" prefWidth="75.0" text="Descrição" />
+          <TableColumn fx:id="tableColumnId_produto" prefWidth="50.0" text="Id" />
+          <TableColumn fx:id="tableColumnP_cat" prefWidth="50.0" text="Id Categoria" />
+            <TableColumn fx:id="tableColumnP_codigo" prefWidth="50.0" text="Código" />
+            <TableColumn fx:id="tableColumnP_desc" prefWidth="500.0" text="Descrição" />
             <TableColumn fx:id="tableColumnP_venda" prefWidth="75.0" text="Venda" />
             <TableColumn fx:id="tableColumnP_custo" prefWidth="75.0" text="Custo" />
-            <TableColumn fx:id="tableColumnP_codBarras" prefWidth="75.0" text="Cod Barras" />
-            <TableColumn fx:id="tableColumnP_fab" prefWidth="75.0" text="Id Fabricante" />
-            <TableColumn fx:id="tableColumnP_forn" prefWidth="75.0" text="Id Fornecedor" />
-            <TableColumn fx:id="tableColumnP_cfab" prefWidth="75.0" text="Cod Fabricante" />
-            <TableColumn fx:id="tableColumnP_lucro" prefWidth="75.0" text="\% Lucro" />
-            <TableColumn fx:id="tableColumnP_maxDesc" prefWidth="75.0" text="\% Max Desconto" />
-            <TableColumn fx:id="tableColumnP_status" prefWidth="75.0" text="Status" />
+            <TableColumn fx:id="tableColumnP_codBarras" prefWidth="100.0" text="Cod Barras" />
+            <TableColumn fx:id="tableColumnP_fab" prefWidth="50.0" text="Id Fabricante" />
+            <TableColumn fx:id="tableColumnP_forn" prefWidth="50.0" text="Id Fornecedor" />
+            <TableColumn fx:id="tableColumnP_cfab" prefWidth="100.0" text="Cod Fabricante" />
+            <TableColumn fx:id="tableColumnP_lucro" prefWidth="30.0" text="\% Lucro" />
+            <TableColumn fx:id="tableColumnP_maxDesc" prefWidth="30.0" text="\% Max Desconto" />
+            <TableColumn fx:id="tableColumnP_status" prefWidth="30.0" text="Status" />
         </columns>
       </TableView>
    </children>

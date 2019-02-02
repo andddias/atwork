@@ -34,7 +34,32 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+
+		try {
+			conn.setAutoCommit(false);
+			
+			st = conn.prepareStatement(
+					"DELETE FROM produto "
+					+ "WHERE id_produto = ?");
+			
+			st.setInt(1, id);			
+			
+			st.executeUpdate();
+			
+			conn.commit();
+		}
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DbIntegrityException(e.getMessage());
+			} catch (SQLException e1) {
+				throw new DbIntegrityException("Erro ao tentar reverter! Causado por: " + e1.getMessage());
+			}			
+		}
+		finally {
+			DB.closeStatement(st);
+		}		
 		
 	}
 
