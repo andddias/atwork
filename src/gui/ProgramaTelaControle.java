@@ -16,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.ProdutoService;
 
 public class ProgramaTelaControle implements Initializable {
 	
@@ -30,7 +31,10 @@ public class ProgramaTelaControle implements Initializable {
 	
 	@FXML
 	public void onMenuItemProdutoAction() {
-		System.out.println("onMenuItemProdutoAction");
+		CarregarTela("/gui/ProdutoLista.fxml", (ProdutoListaControle controle) -> {
+			controle.setProdutoService(new ProdutoService());
+			controle.updateTableView();
+		});
 	}
 	
 	@FXML

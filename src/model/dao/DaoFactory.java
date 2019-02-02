@@ -1,11 +1,11 @@
-package db;
+package model.dao;
 
-import model.dao.ProdutoDao;
+import db.DB;
 import model.dao.impl.ProdutoDaoJDBC;
 
 public class DaoFactory {
 	
-	public static ProdutoDao createSellerDao() {
+	public static ProdutoDao createProdutoDao() {
 		return new ProdutoDaoJDBC(DB.getConnection());
 	}
 	
