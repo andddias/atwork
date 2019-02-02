@@ -117,9 +117,38 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 	}
 
 	@Override
-	public List<Produto> findByDepartment(Produto department) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public List<Produto> findByCodigoOuDescricao(String string) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"SELECT * FROM produto "
+					+ "WHERE p_codigo  LIKE \"%"
+					+ string
+					+ "%\" "
+					+ "OR p_desc LIKE \"%" 
+					+ string
+					+ "%\" "
+					+ "ORDER BY p_desc");			
+			
+			rs = st.executeQuery();
+			
+			List<Produto> listProduto = new ArrayList<>();
 
+			while (rs.next()) {			
+				Produto produto = instanciacaoProduto(rs);	
+				listProduto.add(produto);				
+			}
+			
+			return listProduto;			
+					
+		}
+		catch (SQLException e) {
+			throw new DbIntegrityException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
 }

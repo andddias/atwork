@@ -24,7 +24,7 @@ public class Programa extends Application {
 			
 			cenaPrincipal = new Scene(scrollPane);
 			estagioPrimario.setScene(cenaPrincipal);
-			estagioPrimario.setTitle("Programa AT Work");
+			estagioPrimario.setTitle("PROGRAMA AT WORK");
 			estagioPrimario.show();
 		} catch (IOException e) {
 			e.printStackTrace();

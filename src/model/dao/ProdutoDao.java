@@ -11,6 +11,6 @@ public interface ProdutoDao {
 	void deleteById(Integer id);
 	Produto findById(Integer id);
 	List<Produto> findAll();
-	List<Produto> findByDepartment(Produto department);
+	List<Produto> findByCodigoOuDescricao(String string);
 
 }

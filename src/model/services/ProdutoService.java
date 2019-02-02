@@ -14,6 +14,10 @@ public class ProdutoService {
 		return dao.findAll();
 	}
 	
+	public List<Produto> findCodigoOuDescricao(String string) {
+		return dao.findByCodigoOuDescricao(string);
+	}
+	
 	public void saveOrUpdate(Produto obj) {
 		if (obj.getId_produto() == null) {
 			dao.insert(obj);
@@ -25,5 +29,5 @@ public class ProdutoService {
 	
 	public void remove(Produto obj) {
 		dao.deleteById(obj.getId_produto());
-	}
+	}	
 }

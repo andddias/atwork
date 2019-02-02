@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -23,6 +24,8 @@
         <items>
           <Button fx:id="btNovo" mnemonicParsing="false" onAction="#OnBtNovoAction" text="Novo" />
             <Button fx:id="btExcluir" mnemonicParsing="false" onAction="#OnBtExcluirAction" text="Excluir" />
+            <Button fx:id="btEditar" mnemonicParsing="false" onAction="#OnBtEditarAction" text="Editar" />
+            <TextField fx:id="txtPesquisar" onAction="#OnTxtPesquisarAction" prefHeight="25.0" prefWidth="201.0" promptText="Pesquisa por codigo ou descricao" />
         </items>
       </ToolBar>
       <TableView fx:id="tableViewProduto" prefHeight="198.0" prefWidth="386.0">

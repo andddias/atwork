@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.entities.Produto;
@@ -32,6 +33,12 @@ public class ProdutoListaControle implements Initializable {
 	
 	@FXML
 	private Button btExcluir;
+	
+	@FXML
+	private Button btEditar;
+	
+	@FXML
+	private TextField txtPesquisar;
 
 	@FXML
 	private TableView<Produto> tableViewProduto;
@@ -93,6 +100,15 @@ public class ProdutoListaControle implements Initializable {
 		ExcluirProduto(prod);
 	}
 	
+	@FXML
+	public void OnBtEditarAction(ActionEvent event) {
+		System.out.println("OnBtEditarAction");
+	}
+	
+	@FXML
+	public void OnTxtPesquisarAction(ActionEvent event) {
+		updatePesquisaTableView(txtPesquisar.getText());		
+	}	
 
 	public void setProdutoService(ProdutoService service) {
 		this.service = service;
@@ -130,6 +146,20 @@ public class ProdutoListaControle implements Initializable {
 		List<Produto> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
 		tableViewProduto.setItems(obsList);
+	}
+	
+	public void updatePesquisaTableView(String string) {
+		if (service == null) {
+			throw new IllegalStateException("Serviço está nulo");
+		}
+		try {
+			List<Produto> list = service.findCodigoOuDescricao(string);
+			obsList = FXCollections.observableArrayList(list);
+			tableViewProduto.setItems(obsList);
+		}
+		catch (DbIntegrityException e) {
+			Alerts.showAlert("Erro ao pesquisar descrição", null, e.getMessage(), AlertType.ERROR);
+		}	
 	}
 	
 	
@@ -203,7 +233,8 @@ public class ProdutoListaControle implements Initializable {
 	*/
 
 	private void ExcluirProduto(Produto obj) {
-		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação","Você tem certeza que quer excluir este item?");
+		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação","Você tem certeza que quer excluir este item"
+				+ " Código: " + obj.getP_codigo() + " - Descrição: " + obj.getP_desc() + " ?");
 		if (result.get() == ButtonType.OK) {
 			if (service == null) {
 				throw new IllegalStateException("Serviço está nulo");
