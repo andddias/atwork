@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +9,14 @@ import java.util.ResourceBundle;
 import application.Programa;
 import db.DbIntegrityException;
 import gui.util.Alerts;
+import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -20,11 +24,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Produto;
 import model.services.ProdutoService;
 
-public class ProdutoListaControle implements Initializable {
+public class ProdutoListaControle implements Initializable, AlteracaoDadosListener {
 
 	private ProdutoService service;
 	
@@ -90,8 +96,8 @@ public class ProdutoListaControle implements Initializable {
 		/*
 		Stage parentStage = Utils.currentStage(event);
 		Produto obj = new Produto();
-		createDialogForm(obj, "/gui/ProdutoForm.fxml", parentStage);
-		*/
+		createDialogForm(obj, "/gui/ProdutoFormulario.fxml", parentStage);
+		*/		
 	}
 	
 	@FXML
@@ -102,7 +108,9 @@ public class ProdutoListaControle implements Initializable {
 	
 	@FXML
 	public void OnBtEditarAction(ActionEvent event) {
-		System.out.println("OnBtEditarAction");
+		Stage parentStage = Utils.currentStage(event);
+		Produto produto = tableViewProduto.getSelectionModel().getSelectedItem();;
+		createDialogForm(produto, "/gui/ProdutoFormulario.fxml", parentStage);
 	}
 	
 	@FXML
@@ -148,6 +156,11 @@ public class ProdutoListaControle implements Initializable {
 		tableViewProduto.setItems(obsList);
 	}
 	
+	@Override
+	public void onAleteracaoDados() {
+		updateTableView();		
+	}
+	
 	public void updatePesquisaTableView(String string) {
 		if (service == null) {
 			throw new IllegalStateException("Serviço está nulo");
@@ -160,78 +173,31 @@ public class ProdutoListaControle implements Initializable {
 		catch (DbIntegrityException e) {
 			Alerts.showAlert("Erro ao pesquisar descrição", null, e.getMessage(), AlertType.ERROR);
 		}	
-	}
+	}	
 	
-	
-	/*
-	private void createDialogForm(Produto obj, String absoluteName, Stage parentStage) {
+	private void createDialogForm(Produto produto, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			ProdutoFormController controller = loader.getController();
-			controller.setProduto(obj);
+			ProdutoFormularioControle controller = loader.getController();
+			controller.setProduto(produto);
 			controller.setProdutoService(new ProdutoService());
-			controller.subscribeDataChangeListener(this);
-			controller.updateFormData();
+			controller.subscreverAlteracaoDadosListener(this);
+			controller.atualizarDadosFormulario();
 
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Enter Produto data");
+			dialogStage.setTitle("Insira os dados do produto");
 			dialogStage.setScene(new Scene(pane));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.showAndWait();
 		} catch (IOException e) {
-			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+			Alerts.showAlert("IO Exception", "Erro ao carregar a visualização", e.getMessage(), AlertType.ERROR);
 		}
 	}
 	
-
-	@Override
-	public void onDataChange() {
-		updateTableView();
-	}
-	
-
-	private void initEditButtons() {
-		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnEDIT.setCellFactory(param -> new TableCell<Produto, Produto>() {
-			private final Button button = new Button("edit");
-
-			@Override
-			protected void updateItem(Produto obj, boolean empty) {
-				super.updateItem(obj, empty);
-				if (obj == null) {
-					setGraphic(null);
-					return;
-				}
-				setGraphic(button);
-				button.setOnAction(
-						event -> createDialogForm(obj, "/gui/ProdutoForm.fxml", Utils.currentStage(event)));
-			}
-		});
-	}
-
-	private void initRemoveButtons() {
-		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnREMOVE.setCellFactory(param -> new TableCell<Produto, Produto>() {
-			private final Button button = new Button("remove");
-
-			@Override
-			protected void updateItem(Produto obj, boolean empty) {
-				super.updateItem(obj, empty);
-				if (obj == null) {
-					setGraphic(null);
-					return;
-				}
-				setGraphic(button);
-				button.setOnAction(event -> removeEntity(obj));
-			}
-		});
-	}
-	*/
-
 	private void ExcluirProduto(Produto obj) {
 		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação","Você tem certeza que quer excluir este item"
 				+ " Código: " + obj.getP_codigo() + " - Descrição: " + obj.getP_desc() + " ?");
@@ -247,5 +213,5 @@ public class ProdutoListaControle implements Initializable {
 				Alerts.showAlert("Erro ao remover o objeto", null, e.getMessage(), AlertType.ERROR);
 			}			
 		}
-	}
+	}	
 }
