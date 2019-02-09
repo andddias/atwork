@@ -92,12 +92,9 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 
 	@FXML
 	public void OnBtNovoAction(ActionEvent event) {
-		System.out.println("OnBtNovoAction");
-		/*
 		Stage parentStage = Utils.currentStage(event);
-		Produto obj = new Produto();
-		createDialogForm(obj, "/gui/ProdutoFormulario.fxml", parentStage);
-		*/		
+		Produto produto = new Produto();
+		createDialogForm(produto, "/gui/ProdutoFormulario.fxml", parentStage);		
 	}
 	
 	@FXML
@@ -109,7 +106,7 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 	@FXML
 	public void OnBtEditarAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		Produto produto = tableViewProduto.getSelectionModel().getSelectedItem();;
+		Produto produto = tableViewProduto.getSelectionModel().getSelectedItem();
 		createDialogForm(produto, "/gui/ProdutoFormulario.fxml", parentStage);
 	}
 	
@@ -157,8 +154,8 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 	}
 	
 	@Override
-	public void onAleteracaoDados() {
-		updateTableView();		
+	public void onAlteracaoDados(String codigo) {
+		updatePesquisaTableView(codigo);		
 	}
 	
 	public void updatePesquisaTableView(String string) {

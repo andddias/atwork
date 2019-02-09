@@ -93,8 +93,8 @@ public class ProdutoFormularioControle implements Initializable {
 		}
 		try {
 			produto = getFormularioDados();
-			produtoService.saveOrUpdate(produto);
-			notificarAlteracaoDadosListeners();
+			produtoService.saveOrUpdate(produto);			
+			notificarAlteracaoDadosListeners(produto.getP_codigo());
 			Utils.currentStage(event).close();
 		}
 		catch (DbIntegrityException e) {
@@ -102,9 +102,9 @@ public class ProdutoFormularioControle implements Initializable {
 		}
 	}
 	
-	private void notificarAlteracaoDadosListeners() {
+	private void notificarAlteracaoDadosListeners(String codigo) {
 		for (AlteracaoDadosListener listener : alteracaoDadosListeners) {
-			listener.onAleteracaoDados();
+			listener.onAlteracaoDados(codigo);
 		}		
 	}
 

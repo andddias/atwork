@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,19 +22,41 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 	}
 
 	@Override
-	public void insert(Produto obj) {
-		/*
+	public void insert(Produto produto) {
+		
 		PreparedStatement st = null;
 
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO department "
-					+ "(Name) "
+					"INSERT INTO produto "
+					+ "(p_codigo"
+					+ ", p_cat"
+					+ ", p_desc"
+					+ ", p_venda"
+					+ ", p_custo"
+					+ ", p_barra"
+					+ ", p_fab"
+					+ ", p_forn"
+					+ ", p_cfab"
+					+ ", p_lucro"
+					+ ", p_maxdesc"
+					+ ", p_st) "
 					+ "VALUES "
-					+ "(?)",
+					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			
-			st.setString(1, dep.getName());
+			st.setString(1, produto.getP_codigo());
+			st.setInt(2, 1);
+			st.setString(3, produto.getP_desc());
+			st.setDouble(4, produto.getP_venda());
+			st.setDouble(5, produto.getP_custo());
+			st.setString(6, produto.getP_codBarra());
+			st.setInt(7, 0);
+			st.setInt(8, 0);
+			st.setString(9, produto.getP_cfab());
+			st.setInt(10, produto.getP_lucro());
+			st.setInt(11, produto.getP_maxDesc());
+			st.setInt(12, 1);		
 			
 			int rowsAffected = st.executeUpdate();
 			
@@ -41,12 +64,12 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
 					int id = rs.getInt(1);
-					dep.setId(id);
+					produto.setId_produto(id);
 				}
 				DB.closeResultSet(rs);
 			}
 			else {
-				throw new DbIntegrityException("Unexpected error! No rows affected!");
+				throw new DbIntegrityException("Erro inesperado! Nenhuma linha afetada!");
 			}
 		}
 		catch (SQLException e) {
@@ -55,7 +78,6 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 		finally {
 			DB.closeStatement(st);
 		}		
-		*/
 	}
 
 	@Override

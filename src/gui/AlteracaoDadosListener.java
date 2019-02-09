@@ -2,6 +2,6 @@ package gui;
 
 public interface AlteracaoDadosListener {
 	
-	void onAleteracaoDados();
+	void onAlteracaoDados(String codigo);
 
 }
