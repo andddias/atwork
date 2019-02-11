@@ -16,12 +16,16 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.ProdutoCategoriaService;
 import model.services.ProdutoService;
 
 public class ProgramaTelaControle implements Initializable {
 	
 	@FXML
 	private MenuItem menuItemProduto;
+	
+	@FXML
+	private MenuItem menuItemProdutoCategoria;
 	
 	@FXML
 	private MenuItem menuItemUsuario;
@@ -36,6 +40,14 @@ public class ProgramaTelaControle implements Initializable {
 			controle.updateTableView();
 		});
 	}
+	
+	@FXML
+	public void onMenuItemProdutoCategoriaAction() {
+		CarregarTela("/gui/ProdutoCategoriaLista.fxml", (ProdutoCategoriaListaControle controle) -> {
+			controle.setProdutoCategoriaService(new ProdutoCategoriaService());
+			controle.updateTableView();
+		});
+	}	
 	
 	@FXML
 	public void onMenuItemUsuarioAction() {

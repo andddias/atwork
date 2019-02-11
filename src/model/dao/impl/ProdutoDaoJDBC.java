@@ -133,12 +133,12 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 		}
 		finally {
 			DB.closeStatement(st);
-		}
-		
+		}		
 	}
 
 	@Override
 	public void deleteById(Integer id) {
+		
 		PreparedStatement st = null;
 
 		try {
@@ -165,7 +165,6 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 		finally {
 			DB.closeStatement(st);
 		}		
-		
 	}
 
 	@Override
@@ -176,6 +175,7 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 
 	@Override
 	public List<Produto> findAll() {
+		
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -223,6 +223,7 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 
 	@Override
 	public List<Produto> findByCodigoOuDescricao(String string) {
+		
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
