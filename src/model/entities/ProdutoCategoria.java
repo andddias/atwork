@@ -66,6 +66,6 @@ public class ProdutoCategoria implements Serializable{
 
 	@Override
 	public String toString() {
-		return "ProdutoCategoria [id_cat=" + id_cat + ", p_cat=" + p_cat + "]";
+		return p_cat;
 	}
 }

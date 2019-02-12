@@ -28,6 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Produto;
+import model.entities.ProdutoCategoria;
 import model.services.ProdutoService;
 
 public class ProdutoListaControle implements Initializable, AlteracaoDadosListener {
@@ -53,7 +54,7 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 	private TableColumn<Produto, Integer> tableColumnId_produto;
 	
 	@FXML
-	private TableColumn<Produto, Integer> tableColumnP_cat;
+	private TableColumn<Produto, ProdutoCategoria> tableColumnP_cat;
 
 	@FXML
 	private TableColumn<Produto, String> tableColumnP_codigo;
@@ -126,7 +127,7 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 
 	private void initializeNodes() {
 		tableColumnId_produto.setCellValueFactory(new PropertyValueFactory<>("id_produto"));
-		tableColumnP_cat.setCellValueFactory(new PropertyValueFactory<>("p_cat"));
+		tableColumnP_cat.setCellValueFactory(new PropertyValueFactory<>("produtoCategoria"));
 		tableColumnP_codigo.setCellValueFactory(new PropertyValueFactory<>("p_codigo"));
 		tableColumnP_desc.setCellValueFactory(new PropertyValueFactory<>("p_desc"));
 		tableColumnP_venda.setCellValueFactory(new PropertyValueFactory<>("p_venda"));

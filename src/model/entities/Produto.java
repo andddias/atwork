@@ -7,7 +7,6 @@ public class Produto implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id_produto;
-	private Integer p_cat;
 	private String p_codigo;
 	private String p_desc;
 	private Double p_venda;
@@ -20,14 +19,15 @@ public class Produto implements Serializable{
 	private Integer p_maxDesc;
 	private Integer p_status;
 	
+	private ProdutoCategoria produtoCategoria;
+	
 	public Produto() {		
 	}
 
-	public Produto(Integer id_produto, Integer p_cat, String p_codigo, String p_desc, Double p_venda, Double p_custo,
-			String p_codBarra, Integer p_fab, Integer p_forn, String p_cfab, Integer p_lucro, Integer p_maxDesc,
-			Integer p_status) {
+	public Produto(Integer id_produto, String p_codigo, String p_desc, Double p_venda, Double p_custo,
+			String p_codBarra, Integer p_fab, Integer p_forn, String p_cfab, Integer p_lucro,
+			Integer p_maxDesc, Integer p_status, ProdutoCategoria produtoCategoria) {
 		this.id_produto = id_produto;
-		this.p_cat = p_cat;
 		this.p_codigo = p_codigo;
 		this.p_desc = p_desc;
 		this.p_venda = p_venda;
@@ -39,6 +39,7 @@ public class Produto implements Serializable{
 		this.p_lucro = p_lucro;
 		this.p_maxDesc = p_maxDesc;
 		this.p_status = p_status;
+		this.produtoCategoria = produtoCategoria;
 	}
 
 	public Integer getId_produto() {
@@ -47,14 +48,6 @@ public class Produto implements Serializable{
 
 	public void setId_produto(Integer id_produto) {
 		this.id_produto = id_produto;
-	}
-
-	public Integer getP_cat() {
-		return p_cat;
-	}
-
-	public void setP_cat(Integer p_cat) {
-		this.p_cat = p_cat;
 	}
 
 	public String getP_codigo() {
@@ -107,7 +100,7 @@ public class Produto implements Serializable{
 
 	public Integer getP_forn() {
 		return p_forn;
-	}
+	}	
 
 	public void setP_forn(Integer p_forn) {
 		this.p_forn = p_forn;
@@ -143,6 +136,14 @@ public class Produto implements Serializable{
 
 	public void setP_status(Integer p_status) {
 		this.p_status = p_status;
+	}	
+
+	public ProdutoCategoria getProdutoCategoria() {
+		return produtoCategoria;
+	}
+
+	public void setProdutoCategoria(ProdutoCategoria produtoCategoria) {
+		this.produtoCategoria = produtoCategoria;
 	}
 
 	@Override
@@ -175,12 +176,12 @@ public class Produto implements Serializable{
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Produto [id_produto=" + id_produto + ", p_cat=" + p_cat + ", p_codigo=" + p_codigo + ", p_desc="
-				+ p_desc + ", p_venda=" + p_venda + ", p_custo=" + p_custo + ", p_codBarra=" + p_codBarra + ", p_fab="
-				+ p_fab + ", p_forn=" + p_forn + ", p_cfab=" + p_cfab + ", p_lucro=" + p_lucro + ", p_maxDesc="
-				+ p_maxDesc + ", p_status=" + p_status + "]";
+		return "Produto [id_produto=" + id_produto + ", p_codigo=" + p_codigo + ", p_desc=" + p_desc + ", p_venda="
+				+ p_venda + ", p_custo=" + p_custo + ", p_codBarra=" + p_codBarra + ", p_fab=" + p_fab + ", p_forn="
+				+ p_forn + ", p_cfab=" + p_cfab + ", p_lucro=" + p_lucro + ", p_maxDesc=" + p_maxDesc + ", p_status="
+				+ p_status + ", produtoCategoria=" + produtoCategoria + "]";
 	}
 }

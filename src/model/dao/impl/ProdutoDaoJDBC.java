@@ -6,12 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DbIntegrityException;
 import model.dao.ProdutoDao;
 import model.entities.Produto;
+import model.entities.ProdutoCategoria;
 
 public class ProdutoDaoJDBC implements ProdutoDao{
 	
@@ -180,14 +183,27 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT * FROM produto "
+					"SELECT produto.*"
+					+ ", p_categoria.id_cat" //porque? precisei declarar essa coluna??????
+					+ ", p_categoria.p_cat as descCategoria "
+					+ "FROM produto INNER JOIN p_categoria "
+					+ "ON produto.p_cat = p_categoria.id_cat "	
 					+ "ORDER BY p_desc");	
 			rs = st.executeQuery();
 			
 			List<Produto> listProduto = new ArrayList<>();
+			Map<Integer, ProdutoCategoria> map = new HashMap<>();
 
-			while (rs.next()) {			
-				Produto produto = instanciacaoProduto(rs);	
+			while (rs.next()) {
+				
+				ProdutoCategoria produtoCategoria = map.get(rs.getInt("p_cat"));
+				
+				if (produtoCategoria == null) {
+					produtoCategoria = instantiateProdutoCategoria(rs);
+					map.put(rs.getInt("p_cat"), produtoCategoria);
+				}				
+				
+				Produto produto = instanciacaoProduto(rs, produtoCategoria);	
 				listProduto.add(produto);				
 			}
 			
@@ -203,10 +219,16 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 		}
 	}
 
-	private Produto instanciacaoProduto(ResultSet rs) throws SQLException {
+	private ProdutoCategoria instantiateProdutoCategoria(ResultSet rs) throws SQLException {
+		ProdutoCategoria produtoCategoria = new ProdutoCategoria();
+		produtoCategoria.setId_cat(rs.getInt("id_cat"));
+		produtoCategoria.setP_cat(rs.getString("descCategoria"));
+		return produtoCategoria;
+	}
+
+	private Produto instanciacaoProduto(ResultSet rs, ProdutoCategoria produtoCategoria) throws SQLException {
 		Produto prod = new Produto();
-		prod.setId_produto(rs.getInt("id_produto"));
-		prod.setP_cat(rs.getInt("p_cat"));
+		prod.setId_produto(rs.getInt("id_produto"));	
 		prod.setP_codigo(rs.getString("p_codigo"));
 		prod.setP_desc(rs.getString("p_desc"));
 		prod.setP_venda(rs.getDouble("p_venda"));
@@ -217,7 +239,8 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 		prod.setP_cfab(rs.getString("p_cfab"));
 		prod.setP_lucro(rs.getInt("p_lucro"));
 		prod.setP_maxDesc(rs.getInt("p_maxdesc"));
-		prod.setP_status(rs.getInt("p_st"));		
+		prod.setP_status(rs.getInt("p_st"));
+		prod.setProdutoCategoria(produtoCategoria);
 		return prod;
 	}
 
@@ -228,7 +251,11 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT * FROM produto "
+					"SELECT produto.*"
+					+ ", p_categoria.id_cat" //porque? precisei declarar essa coluna??????
+					+ ", p_categoria.p_cat as descCategoria "
+					+ "FROM produto INNER JOIN p_categoria "
+					+ "ON produto.p_cat = p_categoria.id_cat "	
 					+ "WHERE p_codigo  LIKE \"%"
 					+ string
 					+ "%\" "
@@ -240,9 +267,18 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 			rs = st.executeQuery();
 			
 			List<Produto> listProduto = new ArrayList<>();
+			Map<Integer, ProdutoCategoria> map = new HashMap<>();
 
-			while (rs.next()) {			
-				Produto produto = instanciacaoProduto(rs);	
+			while (rs.next()) {
+				
+				ProdutoCategoria produtoCategoria = map.get(rs.getInt("p_cat"));
+				
+				if (produtoCategoria == null) {
+					produtoCategoria = instantiateProdutoCategoria(rs);
+					map.put(rs.getInt("p_cat"), produtoCategoria);
+				}				
+				
+				Produto produto = instanciacaoProduto(rs, produtoCategoria);	
 				listProduto.add(produto);				
 			}
 			

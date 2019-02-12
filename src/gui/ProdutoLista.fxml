@@ -31,9 +31,9 @@
       <TableView fx:id="tableViewProduto" prefHeight="198.0" prefWidth="386.0">
         <columns>
           <TableColumn fx:id="tableColumnId_produto" prefWidth="50.0" text="Id" />
-          <TableColumn fx:id="tableColumnP_cat" prefWidth="50.0" text="Id Categoria" />
-            <TableColumn fx:id="tableColumnP_codigo" prefWidth="50.0" text="Código" />
-            <TableColumn fx:id="tableColumnP_desc" prefWidth="500.0" text="Descrição" />
+          <TableColumn fx:id="tableColumnP_cat" prefWidth="153.0" text="Categoria" />
+            <TableColumn fx:id="tableColumnP_codigo" minWidth="0.0" prefWidth="77.0" text="Código" />
+            <TableColumn fx:id="tableColumnP_desc" prefWidth="370.0000305175781" text="Descrição" />
             <TableColumn fx:id="tableColumnP_venda" prefWidth="75.0" text="Venda" />
             <TableColumn fx:id="tableColumnP_custo" prefWidth="75.0" text="Custo" />
             <TableColumn fx:id="tableColumnP_codBarras" prefWidth="100.0" text="Cod Barras" />
