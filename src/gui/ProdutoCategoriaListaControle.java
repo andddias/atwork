@@ -10,6 +10,7 @@ import application.Programa;
 import db.DbIntegrityException;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,12 +28,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.entities.Produto;
 import model.entities.ProdutoCategoria;
 import model.services.ProdutoCategoriaService;
 
 public class ProdutoCategoriaListaControle implements Initializable, AlteracaoDadosListener {
 
 	private ProdutoCategoriaService service;
+	
+	private ProdutoCategoria prodCategSelecao;
 	
 	@FXML
 	private Button btNovo;
@@ -42,6 +46,9 @@ public class ProdutoCategoriaListaControle implements Initializable, AlteracaoDa
 	
 	@FXML
 	private Button btEditar;
+	
+	@FXML
+	private Button btSelecionar;
 	
 	@FXML
 	private TextField txtPesquisar;
@@ -56,6 +63,14 @@ public class ProdutoCategoriaListaControle implements Initializable, AlteracaoDa
 	private TableColumn<ProdutoCategoria, String> tableColumnP_cat;
 	
 	private ObservableList<ProdutoCategoria> obsList;
+	
+	public ProdutoCategoria getProdCategSelecao() {
+		return prodCategSelecao;
+	}
+
+	public void setProdCategSelecao(ProdutoCategoria prodCategSelecao) {
+		this.prodCategSelecao = prodCategSelecao;
+	}
 
 	@FXML
 	public void OnBtNovoAction(ActionEvent event) {
@@ -75,6 +90,13 @@ public class ProdutoCategoriaListaControle implements Initializable, AlteracaoDa
 		Stage parentStage = Utils.currentStage(event);
 		ProdutoCategoria obj = tableView.getSelectionModel().getSelectedItem();
 		createDialogForm(obj, "/gui/ProdutoCategoriaFormulario.fxml", parentStage);
+	}
+	
+	@FXML
+	public ProdutoCategoria OnBtSelecionarAction(ActionEvent event) {		
+		prodCategSelecao = tableView.getSelectionModel().getSelectedItem();
+		Utils.currentStage(event).close();
+		return prodCategSelecao;
 	}
 	
 	@FXML
@@ -109,8 +131,19 @@ public class ProdutoCategoriaListaControle implements Initializable, AlteracaoDa
 	}
 	
 	@Override
-	public void onAlteracaoDados(String codigo) {
-		updatePesquisaTableView(codigo);		
+	public void onAlteracaoDados(Produto prod) {
+		//updatePesquisaTableView(prod);		
+	}
+	
+	public void onSelecionarCategoria(ProdutoCategoria produtoCategoria) {
+		updateTableView();
+		Platform.runLater(() ->
+		  {
+			  tableView.refresh();			  
+			  tableView.requestFocus();
+			  tableView.scrollTo(produtoCategoria);
+			  
+		  });	
 	}
 	
 	public void updatePesquisaTableView(String string) {
@@ -157,7 +190,7 @@ public class ProdutoCategoriaListaControle implements Initializable, AlteracaoDa
 			if (service == null) {
 				throw new IllegalStateException("Serviço está nulo");
 			}
-			try {
+			try {				
 				service.remove(obj);
 				updateTableView();
 			}

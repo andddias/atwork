@@ -1,7 +1,9 @@
 package gui;
 
+import model.entities.Produto;
+
 public interface AlteracaoDadosListener {
 	
-	void onAlteracaoDados(String codigo);
+	void onAlteracaoDados(Produto prod);
 
 }

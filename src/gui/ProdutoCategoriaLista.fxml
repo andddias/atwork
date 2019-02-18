@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="481.0" prefWidth="1478.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutoCategoriaListaControle">
+<VBox prefHeight="481.0" prefWidth="572.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutoCategoriaListaControle">
    <children>
       <Label text="Produto Categoria Registros">
          <font>
@@ -26,6 +26,7 @@
             <Button fx:id="btExcluir" mnemonicParsing="false" onAction="#OnBtExcluirAction" text="Excluir" />
             <Button fx:id="btEditar" mnemonicParsing="false" onAction="#OnBtEditarAction" text="Editar" />
             <TextField fx:id="txtPesquisar" onAction="#OnTxtPesquisarAction" prefHeight="25.0" prefWidth="201.0" promptText="Pesquisa por codigo ou descricao" />
+            <Button fx:id="btSelecionar" mnemonicParsing="false" onAction="#OnBtSelecionarAction" text="Selecionar" />
         </items>
       </ToolBar>
       <TableView fx:id="tableView" prefHeight="198.0" prefWidth="386.0">

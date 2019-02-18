@@ -125,9 +125,32 @@ public class ProdutoCategoriaDaoJDBC implements ProdutoCategoriaDao{
 
 	@Override
 	public ProdutoCategoria findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"SELECT * FROM p_categoria "
+					+ "WHERE id_cat = ?");
+			
+			st.setInt(1, id);
+			
+			rs = st.executeQuery();
+			
+			if(rs.next()) {
+				ProdutoCategoria obj = instanciacaoProdutoCategoria(rs);
+				return obj;
+				}				
+			return null;					
+		}
+		catch (SQLException e) {
+			throw new DbIntegrityException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}	
 
 	@Override
 	public List<ProdutoCategoria> findAll() {

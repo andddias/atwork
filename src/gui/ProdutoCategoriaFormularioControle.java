@@ -63,7 +63,7 @@ public class ProdutoCategoriaFormularioControle implements Initializable {
 		try {
 			produtoCategoria = getFormularioDados();
 			produtoCategoriaService.saveOrUpdate(produtoCategoria);			
-			notificarAlteracaoDadosListeners(produtoCategoria.getP_cat());
+			//notificarAlteracaoDadosListeners(produtoCategoria.getP_cat());
 			Utils.currentStage(event).close();
 		}
 		catch (DbIntegrityException e) {
@@ -71,11 +71,13 @@ public class ProdutoCategoriaFormularioControle implements Initializable {
 		}
 	}
 	
+	/*
 	private void notificarAlteracaoDadosListeners(String string) {
 		for (AlteracaoDadosListener listener : alteracaoDadosListeners) {
 			listener.onAlteracaoDados(string);
 		}		
 	}
+	*/
 
 	@FXML
 	public void OnBtCancelarAction(ActionEvent event) {

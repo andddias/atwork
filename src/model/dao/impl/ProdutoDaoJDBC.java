@@ -93,7 +93,7 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 			st = conn.prepareStatement(
 					"UPDATE produto "
 					+ "SET "
-					//+ "p_cat = ?, "
+					+ "p_cat = ?, "
 					+ "p_codigo = ?, "
 					+ "p_desc = ?, "
 					+ "p_venda = ?, "
@@ -107,20 +107,20 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 					//+ "p_st = ? "
 					+ "WHERE id_produto = ?");
 			
-			//st.setInt(1, produto.getP_cat());
-			st.setString(1, produto.getP_codigo());
-			st.setString(2, produto.getP_desc());
-			st.setDouble(3, produto.getP_venda());
-			st.setDouble(4, produto.getP_custo());
-			st.setString(5, produto.getP_codBarra());
+			st.setInt(1, produto.getProdutoCategoria().getId_cat());
+			st.setString(2, produto.getP_codigo());
+			st.setString(3, produto.getP_desc());
+			st.setDouble(4, produto.getP_venda());
+			st.setDouble(5, produto.getP_custo());
+			st.setString(6, produto.getP_codBarra());
 			//st.setInt(7, produto.getP_fab());
 			//st.setInt(8, produto.getP_forn());
-			st.setString(6, produto.getP_cfab());
-			st.setInt(7, produto.getP_lucro());
-			st.setInt(8, produto.getP_maxDesc());
+			st.setString(7, produto.getP_cfab());
+			st.setInt(8, produto.getP_lucro());
+			st.setInt(9, produto.getP_maxDesc());
 			//st.setInt(12, produto.getP_status());
 			
-			st.setInt(9, produto.getId_produto());
+			st.setInt(10, produto.getId_produto());
 			
 			st.executeUpdate();
 			

@@ -10,6 +10,10 @@ public class ProdutoCategoriaService {
 	
 	private ProdutoCategoriaDao dao = DaoFactory.createProdutoCategoriaDao();
 	
+	public ProdutoCategoria findById(Integer id) {
+		return dao.findById(id);
+	}
+	
 	public List<ProdutoCategoria> findAll() {
 		return dao.findAll();
 	}

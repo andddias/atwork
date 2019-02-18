@@ -10,6 +10,7 @@ import application.Programa;
 import db.DbIntegrityException;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,7 +34,7 @@ import model.services.ProdutoService;
 
 public class ProdutoListaControle implements Initializable, AlteracaoDadosListener {
 
-	private ProdutoService service;
+	private ProdutoService produtoService;
 	
 	@FXML
 	private Button btNovo;
@@ -93,21 +94,23 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 
 	@FXML
 	public void OnBtNovoAction(ActionEvent event) {
-		Stage parentStage = Utils.currentStage(event);
+		Stage parentStage = Utils.currentStage(event);		
+		ProdutoCategoria produtoCategoria = new ProdutoCategoria();
 		Produto produto = new Produto();
+		produto.setProdutoCategoria(produtoCategoria);
 		createDialogForm(produto, "/gui/ProdutoFormulario.fxml", parentStage);		
 	}
 	
 	@FXML
 	public void OnBtExcluirAction(ActionEvent event) {
-		Produto prod = tableViewProduto.getSelectionModel().getSelectedItem();
+		Produto prod = tableViewProduto.getSelectionModel().getSelectedItem();		
 		ExcluirProduto(prod);
 	}
 	
 	@FXML
 	public void OnBtEditarAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		Produto produto = tableViewProduto.getSelectionModel().getSelectedItem();
+		Produto produto = tableViewProduto.getSelectionModel().getSelectedItem();		
 		createDialogForm(produto, "/gui/ProdutoFormulario.fxml", parentStage);
 	}
 	
@@ -116,8 +119,8 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 		updatePesquisaTableView(txtPesquisar.getText());		
 	}	
 
-	public void setProdutoService(ProdutoService service) {
-		this.service = service;
+	public void setProdutoService(ProdutoService produtoService) {
+		this.produtoService = produtoService;
 	}
 
 	@Override
@@ -142,29 +145,36 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 
 		// comandos para fazer tableViewProduto acompanhar o tamanho da janela
 		Stage stage = (Stage) Programa.getCenaPrincipal().getWindow();
-		tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
+		tableViewProduto.prefHeightProperty().bind(stage.heightProperty());		
 	}
 
 	public void updateTableView() {
-		if (service == null) {
+		if (produtoService == null) {
 			throw new IllegalStateException("Serviço está nulo");
 		}
-		List<Produto> list = service.findAll();
-		obsList = FXCollections.observableArrayList(list);
-		tableViewProduto.setItems(obsList);
+		
+		List<Produto> list = produtoService.findAll();		
+		obsList = FXCollections.observableArrayList(list);		
+		tableViewProduto.setItems(obsList);		
 	}
 	
 	@Override
-	public void onAlteracaoDados(String codigo) {
-		updatePesquisaTableView(codigo);		
-	}
+	public void onAlteracaoDados(Produto prod) {
+		updateTableView();
+		Platform.runLater(() ->
+		  {
+			  tableViewProduto.refresh();
+			  tableViewProduto.requestFocus();
+			  tableViewProduto.scrollTo(prod);
+		  });
+	}	
 	
 	public void updatePesquisaTableView(String string) {
-		if (service == null) {
+		if (produtoService == null) {
 			throw new IllegalStateException("Serviço está nulo");
 		}
 		try {
-			List<Produto> list = service.findCodigoOuDescricao(string);
+			List<Produto> list = produtoService.findCodigoOuDescricao(string);
 			obsList = FXCollections.observableArrayList(list);
 			tableViewProduto.setItems(obsList);
 		}
@@ -180,7 +190,7 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 
 			ProdutoFormularioControle controller = loader.getController();
 			controller.setProduto(produto);
-			controller.setProdutoService(new ProdutoService());
+			controller.setProdutoService(new ProdutoService());			
 			controller.subscreverAlteracaoDadosListener(this);
 			controller.atualizarDadosFormulario();
 
@@ -200,11 +210,11 @@ public class ProdutoListaControle implements Initializable, AlteracaoDadosListen
 		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação","Você tem certeza que quer excluir este item"
 				+ " Código: " + obj.getP_codigo() + " - Descrição: " + obj.getP_desc() + " ?");
 		if (result.get() == ButtonType.OK) {
-			if (service == null) {
+			if (produtoService == null) {
 				throw new IllegalStateException("Serviço está nulo");
 			}
 			try {
-				service.remove(obj);
+				produtoService.remove(obj);
 				updateTableView();
 			}
 			catch (DbIntegrityException e) {
