@@ -71,6 +71,10 @@ public class ProdutoCategoriaListaControle implements Initializable, AlteracaoDa
 	public void setProdCategSelecao(ProdutoCategoria prodCategSelecao) {
 		this.prodCategSelecao = prodCategSelecao;
 	}
+	
+	public void setDisableBtSelecionar() {
+		btSelecionar.setDisable(false);
+	}
 
 	@FXML
 	public void OnBtNovoAction(ActionEvent event) {
@@ -115,7 +119,9 @@ public class ProdutoCategoriaListaControle implements Initializable, AlteracaoDa
 
 	private void initializeNodes() {
 		tableColumnId_cat.setCellValueFactory(new PropertyValueFactory<>("id_cat"));
-		tableColumnP_cat.setCellValueFactory(new PropertyValueFactory<>("p_cat"));		
+		tableColumnP_cat.setCellValueFactory(new PropertyValueFactory<>("p_cat"));
+		
+		btSelecionar.setDisable(true);
 		
 		Stage stage = (Stage) Programa.getCenaPrincipal().getWindow();
 		tableView.prefHeightProperty().bind(stage.heightProperty());

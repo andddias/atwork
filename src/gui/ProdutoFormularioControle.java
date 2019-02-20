@@ -34,7 +34,7 @@ public class ProdutoFormularioControle implements Initializable {
 
 	private ProdutoService produtoService;
 	
-	private ProdutoCategoria produtoCategoria;
+	private ProdutoCategoria produtoCategoriaPesquisa;
 	
 	private ProdutoCategoriaService produtoCategoriaService;
 	
@@ -101,8 +101,8 @@ public class ProdutoFormularioControle implements Initializable {
 		this.produtoService = produtoService;
 	}	
 	
-	public void setProdutoCategoria(ProdutoCategoria produtoCategoria) {
-		this.produtoCategoria = produtoCategoria;
+	public void setProdutoCategoriaPesquisa(ProdutoCategoria produtoCategoriaPesquisa) {
+		this.produtoCategoriaPesquisa = produtoCategoriaPesquisa;
 	}
 
 	public void setProdutoCategoriaService(ProdutoCategoriaService produtoCategoriaService) {
@@ -119,28 +119,29 @@ public class ProdutoFormularioControle implements Initializable {
 	}
 	
 	private void atualizarLabelCategoria(Integer id_cat) {		
-		produtoCategoria = produto.getProdutoCategoria();
+		produtoCategoriaPesquisa = produto.getProdutoCategoria();
 		setProdutoCategoriaService(new ProdutoCategoriaService());		
 		if(produtoCategoriaService.findById(id_cat) != null) {
-			setProdutoCategoria(produtoCategoriaService.findById(id_cat));
-			lblProdutoCategoria.setText(produtoCategoria.getP_cat());		
+			setProdutoCategoriaPesquisa(produtoCategoriaService.findById(id_cat));
+			lblProdutoCategoria.setText(produtoCategoriaPesquisa.getP_cat());		
 		}
 		else {			
 			Alerts.showAlert("Erro Consulta Produto Categoria", null, "Não Existe categoria de Poduto com o ID digitado!"
 					+ "\nO valor será retornado para o Original", AlertType.ERROR);
-			txtId_cat.setText(String.valueOf(produtoCategoria.getId_cat()));
-			lblProdutoCategoria.setText(produtoCategoria.getP_cat());
+			txtId_cat.setText(String.valueOf(produto.getProdutoCategoria().getId_cat()));
+			lblProdutoCategoria.setText(produto.getProdutoCategoria().getP_cat());
 		}			
 	}
 
 	@FXML
 	public void OnBtPesquisarCategoriaAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		produtoCategoria = produto.getProdutoCategoria();
-		ProdutoCategoria produtoCategoriaSelecao = createDialogForm(produtoCategoria, "/gui/ProdutoCategoriaLista.fxml", parentStage);
+		produtoCategoriaPesquisa = produto.getProdutoCategoria();
+		ProdutoCategoria produtoCategoriaSelecao = createDialogForm(produtoCategoriaPesquisa, "/gui/ProdutoCategoriaLista.fxml", parentStage);
 		if(produtoCategoriaSelecao != null) {
 			txtId_cat.setText(String.valueOf(produtoCategoriaSelecao.getId_cat()));
 			atualizarLabelCategoria(produtoCategoriaSelecao.getId_cat());
+			produtoCategoriaPesquisa = produtoCategoriaSelecao;
 		}		
 	}
 
@@ -172,13 +173,11 @@ public class ProdutoFormularioControle implements Initializable {
 	@FXML
 	public void OnBtCancelarAction(ActionEvent event) {
 		Utils.currentStage(event).close();
-
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNode();
-
 	}
 	
 	private void initializeNode() {
@@ -225,9 +224,9 @@ public class ProdutoFormularioControle implements Initializable {
 			exception.addError("descricao", "Campo não pode estar vazio");
 		}
 		
-		produto.setP_desc(txtP_desc.getText());
+		produto.setP_desc(txtP_desc.getText());		
 		
-		produto.setProdutoCategoria(produtoCategoria);
+		produto.setProdutoCategoria(produtoCategoriaPesquisa);
 		
 		produto.setP_custo(Double.valueOf(txtP_custo.getText()));
 		produto.setP_venda(Double.valueOf(txtP_venda.getText()));
@@ -249,7 +248,8 @@ public class ProdutoFormularioControle implements Initializable {
 
 			ProdutoCategoriaListaControle controller = loader.getController();
 			controller.setProdutoCategoriaService(new ProdutoCategoriaService());
-			controller.onSelecionarCategoria(obj);			
+			controller.onSelecionarCategoria(obj);
+			controller.setDisableBtSelecionar();
 			//controller.subscreverAlteracaoDadosListener(this);			
 
 			Stage dialogStage = new Stage();

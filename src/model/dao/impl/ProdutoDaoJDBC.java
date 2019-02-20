@@ -49,7 +49,7 @@ public class ProdutoDaoJDBC implements ProdutoDao{
 					Statement.RETURN_GENERATED_KEYS);
 			
 			st.setString(1, produto.getP_codigo());
-			st.setInt(2, 1);
+			st.setInt(2, produto.getProdutoCategoria().getId_cat());
 			st.setString(3, produto.getP_desc());
 			st.setDouble(4, produto.getP_venda());
 			st.setDouble(5, produto.getP_custo());
